@@ -1,0 +1,41 @@
+{
+  "name": "@youndukn/voice-play-sdk",
+  "version": "0.1.0",
+  "description": "Voice Play SDK: unified TTS generation and voice catalog helpers for character voice apps.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "keywords": [
+    "text-to-speech",
+    "tts",
+    "voice",
+    "ai",
+    "speech",
+    "elevenlabs",
+    "cartesia",
+    "openai"
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@speech-sdk/core": "^0.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.3",
+    "typescript": "~5.9.2"
+  }
+}
