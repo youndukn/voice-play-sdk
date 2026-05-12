@@ -125,6 +125,10 @@ async function listElevenLabsVoices(query: VoiceSearchQuery, env: NodeJS.Process
       tags: [voice.category, ...Object.values(voice.labels ?? {})].filter((tag): tag is string => Boolean(tag)),
       previewUrl: voice.preview_url,
       isCustom: voice.category === 'cloned',
+      extensions: {
+        category: voice.category,
+        labels: voice.labels,
+      },
       raw: voice,
     })) ?? [];
 
@@ -164,6 +168,9 @@ async function listCartesiaVoices(query: VoiceSearchQuery, env: NodeJS.ProcessEn
       tags: voice.tags,
       previewUrl: voice.preview_url,
       isCustom: voice.is_owner,
+      extensions: {
+        isOwner: voice.is_owner,
+      },
       raw: voice,
     })) ?? [];
 
@@ -183,6 +190,8 @@ async function listMurfVoices(query: VoiceSearchQuery, env: NodeJS.ProcessEnv, f
     locale?: string;
     gender?: string;
     styles?: string[];
+    voiceType?: string;
+    availableStyles?: string[];
   }>;
   const voices = json.map((voice) => ({
     id: voice.voiceId,
@@ -190,7 +199,12 @@ async function listMurfVoices(query: VoiceSearchQuery, env: NodeJS.ProcessEnv, f
     provider: 'murf',
     language: voice.locale,
     gender: voice.gender,
-    tags: voice.styles,
+    tags: voice.styles ?? voice.availableStyles,
+    extensions: {
+      voiceType: voice.voiceType,
+      styles: voice.styles,
+      availableStyles: voice.availableStyles,
+    },
     raw: voice,
   }));
 
@@ -207,7 +221,7 @@ async function listFishVoices(query: VoiceSearchQuery, env: NodeJS.ProcessEnv, f
   const response = await fetchFn(url, { headers: { Authorization: `Bearer ${apiKey}` } });
   await assertOk(response, url.toString());
   const json = (await response.json()) as {
-    items?: Array<{ id: string; title?: string; description?: string; language?: string; tags?: string[] }>;
+    items?: Array<{ id: string; title?: string; description?: string; language?: string; tags?: string[]; type?: string }>;
   };
   const voices =
     json.items?.map((voice) => ({
@@ -217,6 +231,10 @@ async function listFishVoices(query: VoiceSearchQuery, env: NodeJS.ProcessEnv, f
       language: voice.language,
       tags: voice.tags,
       isCustom: false,
+      extensions: {
+        description: voice.description,
+        type: voice.type,
+      },
       raw: voice,
     })) ?? [];
 
@@ -233,8 +251,8 @@ async function listResembleVoices(query: VoiceSearchQuery, env: NodeJS.ProcessEn
   });
   await assertOk(response, url.toString());
   const json = (await response.json()) as {
-    items?: Array<{ uuid: string; name: string; language?: string }>;
-    voices?: Array<{ uuid: string; name: string; language?: string }>;
+    items?: Array<{ uuid: string; name: string; language?: string; gender?: string; accent?: string; use_case?: string; sample_url?: string }>;
+    voices?: Array<{ uuid: string; name: string; language?: string; gender?: string; accent?: string; use_case?: string; sample_url?: string }>;
   };
   const source = json.items ?? json.voices ?? [];
   const voices = source.map((voice) => ({
@@ -242,7 +260,14 @@ async function listResembleVoices(query: VoiceSearchQuery, env: NodeJS.ProcessEn
     name: voice.name,
     provider: 'resemble',
     language: voice.language,
+    gender: voice.gender,
+    accent: voice.accent,
+    tags: [voice.use_case].filter((tag): tag is string => Boolean(tag)),
+    previewUrl: voice.sample_url,
     isCustom: true,
+    extensions: {
+      useCase: voice.use_case,
+    },
     raw: voice,
   }));
 

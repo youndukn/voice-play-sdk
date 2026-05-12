@@ -44,6 +44,7 @@ export type VoiceOption = {
   previewUrl?: string;
   isCustom?: boolean;
   model?: string;
+  extensions?: Record<string, unknown>;
   raw?: unknown;
 };
 

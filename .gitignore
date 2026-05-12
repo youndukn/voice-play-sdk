@@ -3,4 +3,5 @@ dist
 .env
 .env.local
 provider-verification.json
+voice-catalog-inspection.json
 .DS_Store
