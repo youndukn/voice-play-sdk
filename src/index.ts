@@ -1,5 +1,5 @@
-export { generateVoiceSpeech, supportsSpeechGeneration } from './speech';
-export { listVoices } from './catalog';
+export { generateVoiceSpeech, supportsSpeechGeneration } from './speech.js';
+export { listVoices } from './catalog.js';
 export type {
   VoiceGenerationRequest,
   VoiceGenerationResponse,
@@ -8,4 +8,4 @@ export type {
   VoiceProviderId,
   VoiceSdkConfig,
   VoiceSearchQuery,
-} from './types';
+} from './types.js';

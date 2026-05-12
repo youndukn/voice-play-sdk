@@ -18,7 +18,8 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "verify:providers": "tsx scripts/verify-providers.ts"
   },
   "keywords": [
     "text-to-speech",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.10.3",
+    "tsx": "^4.21.0",
     "typescript": "~5.9.2"
   }
 }

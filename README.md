@@ -83,6 +83,18 @@ await listVoices(
 - Fish Audio: API model list
 - Resemble AI: API voice list
 
+## Provider Verification
+
+Create `.env.local` with whichever keys you have, then run:
+
+```bash
+npm run verify:providers
+```
+
+The verifier skips missing providers and writes `provider-verification.json`.
+
+Currently excluded from the verifier: Deepgram, PlayHT, Azure, AWS Polly, and IBM Watson.
+
 ## License
 
 Apache-2.0.

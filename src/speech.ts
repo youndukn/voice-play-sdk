@@ -9,8 +9,8 @@ import {
   createOpenAI,
   createResemble,
 } from '@speech-sdk/core/providers';
-import { VoiceGenerationRequest, VoiceGenerationResponse, VoiceSdkConfig } from './types';
-import { normalizeProviderId, requiredEnv } from './utils';
+import { VoiceGenerationRequest, VoiceGenerationResponse, VoiceSdkConfig } from './types.js';
+import { normalizeProviderId, requiredEnv } from './utils.js';
 
 const supportedProviders = new Set([
   'openai',

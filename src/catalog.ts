@@ -1,5 +1,5 @@
-import { VoiceListResult, VoiceOption, VoiceSearchQuery, VoiceSdkConfig } from './types';
-import { assertOk, filterVoices, normalizeProviderId, requiredEnv } from './utils';
+import { VoiceListResult, VoiceOption, VoiceSearchQuery, VoiceSdkConfig } from './types.js';
+import { assertOk, filterVoices, normalizeProviderId, requiredEnv } from './utils.js';
 
 const openAiVoices: VoiceOption[] = [
   'alloy',
@@ -203,9 +203,7 @@ async function listFishVoices(query: VoiceSearchQuery, env: NodeJS.ProcessEnv, f
   if (query.search) {
     url.searchParams.set('title', query.search);
   }
-  if (query.limit) {
-    url.searchParams.set('page_size', String(query.limit));
-  }
+  url.searchParams.set('page_size', String(Math.max(10, query.limit ?? 10)));
   const response = await fetchFn(url, { headers: { Authorization: `Bearer ${apiKey}` } });
   await assertOk(response, url.toString());
   const json = (await response.json()) as {
@@ -227,10 +225,13 @@ async function listFishVoices(query: VoiceSearchQuery, env: NodeJS.ProcessEnv, f
 
 async function listResembleVoices(query: VoiceSearchQuery, env: NodeJS.ProcessEnv, fetchFn: typeof fetch) {
   const apiKey = requiredEnv(env, 'Resemble AI', ['RESEMBLE_API_KEY']);
-  const response = await fetchFn('https://app.resemble.ai/api/v2/voices', {
+  const url = new URL('https://app.resemble.ai/api/v2/voices');
+  url.searchParams.set('page', '1');
+  url.searchParams.set('page_size', String(Math.max(10, query.limit ?? 10)));
+  const response = await fetchFn(url, {
     headers: { Authorization: `Token token=${apiKey}` },
   });
-  await assertOk(response, 'https://app.resemble.ai/api/v2/voices');
+  await assertOk(response, url.toString());
   const json = (await response.json()) as {
     items?: Array<{ uuid: string; name: string; language?: string }>;
     voices?: Array<{ uuid: string; name: string; language?: string }>;
